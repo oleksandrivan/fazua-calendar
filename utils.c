@@ -3,33 +3,26 @@
 //
 #include "utils.h"
 
-time_t timestamp;
-
 void reallocSchedule(struct Schedule *schedule);
 
-void startTime(){
-    time(&timestamp);
-}
-
-void getTime(struct LocalTime *localTime,int *speedFactor){
+void getTime(struct LocalTime *localTime,int *speedFactor, time_t *timestamp){
     time_t actual;
     time(&actual);
 
-    time_t difference = (int) actual - timestamp;
+    time_t difference = (int) actual - *timestamp;
     difference *= *speedFactor;
-    printf("The difference is %d\n",difference);
     localTime->minute = (difference % 30) * 2;
     localTime->hour = difference / 30;
-    localTime->hour = localTime->hour % 24; //Hours from 0 to 23
+    localTime->hour = localTime->hour % 24; //TODO All undone after 1 day
 
 }
 
-void setTime(struct LocalTime *newTime, int *speedFactor){
+void setTime(struct LocalTime *newTime, int *speedFactor, time_t *timestamp){
     time_t actual;
     time(&actual);
     int difference = newTime->hour * 30 + newTime->minute/2;
     difference /= *speedFactor;
-    timestamp = actual - difference;
+    *timestamp = actual - difference;
 }
 
 void initializeSchedule(struct Schedule *schedule){
@@ -57,14 +50,30 @@ void reallocSchedule(struct Schedule *schedule) {
 struct Activity createActivity(const char * name, struct LocalTime *start, struct LocalTime *end){
     struct Activity newActivity;
 
-    //Allocate and copy name string
-    char *activityName = malloc(sizeof(*name));
-    strcpy(activityName,name);
-
-    newActivity.name = activityName;
+    newActivity.name = strdup(name);
     newActivity.start = *start;
     newActivity.end = *end;
     newActivity.done = false;
+    newActivity.startCheck = false;
+    newActivity.endCheck = false;
+    newActivity.forceCheck = false;
 
     return newActivity;
+}
+
+int getCurrentActivity(struct Schedule *schedule,struct LocalTime *currentTime){
+    int diff1,diff2;
+    struct LocalTime start, end;
+    for(int i = 0; i < schedule->usedSlots ; i++){
+        start = schedule->activities[i].start;
+        end = schedule->activities[i].end;
+        diff1 = (currentTime->hour - start.hour)*60 + (currentTime->minute - start.minute);
+        diff2 = (end.hour - currentTime->hour)*60 + (end.minute - currentTime->minute);
+
+        if(diff1 >= 0 && diff2 > 0){
+            if(diff2 <= 10 && !schedule->activities[i].done)
+                schedule->activities[i].endCheck = true;
+            return  i;
+        }
+    }
 }

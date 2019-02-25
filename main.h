@@ -7,5 +7,8 @@
 
 #include <stdio.h>
 #include "utils.h"
+#include "io.h"
+#include <fcntl.h>
+
 
 #endif //FAZUA_CALENDAR_MAIN_H

@@ -25,6 +25,7 @@ struct Activity{
     struct LocalTime end;
     bool done;
     char *name;
+    bool startCheck,endCheck,forceCheck;
 };
 
 struct Schedule{
@@ -33,14 +34,14 @@ struct Schedule{
     struct Activity *activities;
 };
 
-void startTime();
+void getTime(struct LocalTime *localTime,int *speedFactor, time_t *timestamp);
 
-void getTime(struct LocalTime *localTime,int *speedFactor);
-
-void setTime(struct LocalTime *newTime, int *speedFactor);
+void setTime(struct LocalTime *newTime, int *speedFactor, time_t *timestamp);
 
 void addActivity(struct Schedule *schedule, struct Activity *activity);
 
 struct Activity createActivity(const char * name, struct LocalTime *start, struct LocalTime *end);
+
+int getCurrentActivity(struct Schedule *schedule,struct LocalTime *currentTime);
 
 #endif //FAZUA_CALENDAR_UTILS_H
