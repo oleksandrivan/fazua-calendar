@@ -13,7 +13,6 @@ void getTime(struct LocalTime *localTime,int *speedFactor, time_t *timestamp){
     difference *= *speedFactor;
     localTime->minute = (difference % 30) * 2;
     localTime->hour = difference / 30;
-    localTime->hour = localTime->hour % 24; //TODO All undone after 1 day
 
 }
 
@@ -76,3 +75,15 @@ int getCurrentActivity(struct Schedule *schedule,struct LocalTime *currentTime){
     return 0;
 }
 
+void restartDay(struct LocalTime *localTime, struct Schedule *schedule){
+    if(localTime->hour / 24 == 1){
+        for(int i = 0; i<schedule->usedSlots; i++){
+            schedule->activities[i].done = false;
+            schedule->activities[i].startCheck = false;
+            schedule->activities[i].forceCheck = false;
+            schedule->activities[i].endCheck = false;
+            schedule->activities[i].timesPrinted = 0;
+        }
+        localTime->hour %= 24;
+    }
+}

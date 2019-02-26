@@ -24,7 +24,6 @@ int main(int argc, char *argv[] ){
     readSchedule(&schedule);
 
 
-
     time(&timestamp);
     while(true){
         if(inputAvailable()){
@@ -39,6 +38,7 @@ int main(int argc, char *argv[] ){
                 } else if (1 == sscanf(line, "%s", answer)) {
                     if(strcmp(answer,"now") == 0){
                         getTime(&localTime,&speedFactor,&timestamp);
+                        restartDay(&localTime,&schedule);
                         printf("Actual time is %d:%d \n",localTime.hour,localTime.minute);
                         actualActivityIndex = getCurrentActivity(&schedule,&localTime);
                         schedule.activities[actualActivityIndex].forceCheck = true;

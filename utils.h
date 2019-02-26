@@ -43,4 +43,6 @@ void addActivity(struct Schedule *schedule, char *name, struct LocalTime *start,
 
 int getCurrentActivity(struct Schedule *schedule,struct LocalTime *currentTime);
 
+void restartDay(struct LocalTime *localTime, struct Schedule *schedule);
+
 #endif //FAZUA_CALENDAR_UTILS_H
