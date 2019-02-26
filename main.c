@@ -16,27 +16,35 @@ int main(int argc, char *argv[] ){
     char *endptr;
 
     if(argc == 2){
-        speedFactor = (int) strtol(argv[1],&endptr,10);
+        speedFactor = (int) strtol(argv[1],&endptr,10); //Sets speed factor passed as argument
         printf("The speed factor is %d\n",speedFactor);
     }
 
-    signal(SIGINT,signalHandler);
-    readSchedule(&schedule);
+    signal(SIGINT,signalHandler); //Binds signal to handler for ^C signal
+    readSchedule(&schedule); //Load schedule
 
+    printf("Welcome to Calendar App \nWrite 'now' + enter for checking current activity \n"
+           "Write specific time in HH:MM format and enter to set time \nPress ^C at any time to exit\n"
+           "Your loaded schedule is:\n");
+    for (int i = 0; i < schedule.usedSlots; ++i) {
+        printf("Activity '%s' starts at %d:%d and finishes at %d:%d \n",
+                schedule.activities[i].name,schedule.activities[i].start.hour, schedule.activities[i].start.minute,
+               schedule.activities[i].end.hour,schedule.activities[i].end.minute);
+    }
 
-    time(&timestamp);
+    time(&timestamp); //Saves start time for our calendar
     while(true){
-        if(inputAvailable()){
+        if(inputAvailable()){ //Checks if user wrote smthg
             timestamp -=3;
             if (fgets(line, sizeof(line), stdin)) {
-                if (2 == sscanf(line, "%d:%d", &hour,&min)){
+                if (2 == sscanf(line, "%d:%d", &hour,&min)){ //Time was entered
                     printf("Time introduced is %d:%d \n",hour,min);
                     struct LocalTime newTime;
                     newTime.hour = hour;
                     newTime.minute = min;
                     setTime(&newTime, &speedFactor,&timestamp);
                 } else if (1 == sscanf(line, "%s", answer)) {
-                    if(strcmp(answer,"now") == 0){
+                    if(strcmp(answer,"now") == 0){ //Now was entered
                         getTime(&localTime,&speedFactor,&timestamp);
                         restartDay(&localTime,&schedule);
                         printf("Actual time is %d:%d \n",localTime.hour,localTime.minute);
@@ -49,7 +57,7 @@ int main(int argc, char *argv[] ){
             }
             sleep(3);
         } else{
-            checkActivity(&schedule.activities[actualActivityIndex],&timestamp);
+            checkActivity(&schedule.activities[actualActivityIndex],&timestamp); //Checks activities at specific moment
             getTime(&localTime,&speedFactor,&timestamp);
             actualActivityIndex = getCurrentActivity(&schedule,&localTime);
 
@@ -62,7 +70,7 @@ int main(int argc, char *argv[] ){
 
 void signalHandler(int sig){
     printf("Calendar app finished\n");
-        for(int i = 0; i < schedule.usedSlots ; i++){
+        for(int i = 0; i < schedule.usedSlots ; i++){ //Frees all allocated memory and exit
         free(schedule.activities[i].name);
     }
     free(schedule.activities);

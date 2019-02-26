@@ -14,12 +14,14 @@ void readSchedule(struct Schedule *schedule){
     if (fp == NULL)
         printf("Schedule.txt missing at root folder\n");
 
-    while (fgets(line, sizeof(line), fp)){
-        if(3 == sscanf(line, "%s , %s , %s \n", start,end,name));
-
-        struct LocalTime startTime =  parseTime(start);
-        struct LocalTime endTime =  parseTime(end);
-        addActivity(schedule,name,&startTime,&endTime);
+    while (fgets(line, sizeof(line), fp)) {
+        if (3 == sscanf(line, "%s , %s , %s \n", start, end, name)) {
+            struct LocalTime startTime = parseTime(start);
+            struct LocalTime endTime = parseTime(end);
+            addActivity(schedule, name, &startTime, &endTime);
+        } else{
+            printf("Bad format schedule.txt\n");
+        }
 
     }
 
@@ -53,23 +55,23 @@ void checkActivity(struct Activity * activity, time_t *timestamp){
 
     if(activity->done && activity->forceCheck){
         activity->forceCheck = false;
-        printf("Chill, the activity %s is done \n",activity->name);
+        printf("Chill, the activity '%s' is done \n",activity->name);
     } else{
         if(!activity->startCheck){
             activity->startCheck = true;
-            printf("Is activity %s done? [yes/no] \n",activity->name);
+            printf("Is activity '%s' done? [yes/no] \n",activity->name);
             time(&tic);
             activity->done = readYesNo(activity);
             time(&toc);
             activity->timesPrinted++;
         } else if(activity->forceCheck){
             activity->forceCheck = false;
-            printf("Is activity %s done? [yes/no] \n",activity->name);
+            printf("Is activity '%s' done? [yes/no] \n",activity->name);
             time(&tic);
             activity->done = readYesNo(activity);
             time(&toc);
         } else if(activity->endCheck && !activity->done && activity->timesPrinted < 2) {
-            printf("Is activity %s done? [yes/no] \n",activity->name);
+            printf("Is activity '%s' done? [yes/no] \n",activity->name);
             time(&tic);
             activity->done = readYesNo(activity);
             time(&toc);
