@@ -13,8 +13,8 @@
 #include <memory.h>
 
 struct LocalTime{
-    int hour;
-    int minute;
+    int8_t hour;
+    int8_t minute;
 };
 /**
  * Structure to simulate time in our calendar
@@ -26,6 +26,7 @@ struct Activity{
     bool done;
     char *name;
     bool startCheck,endCheck,forceCheck;
+    int8_t timesPrinted;
 };
 
 struct Schedule{

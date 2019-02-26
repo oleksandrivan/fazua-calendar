@@ -66,17 +66,19 @@ void checkActivity(struct Activity * activity, time_t *timestamp){
             time(&tic);
             activity->done = readYesNo(activity);
             time(&toc);
+            activity->timesPrinted++;
         } else if(activity->forceCheck){
             activity->forceCheck = false;
             printf("Is activity %s done? [yes/no] \n",activity->name);
             time(&tic);
             activity->done = readYesNo(activity);
             time(&toc);
-        } else if(activity->endCheck) {
+        } else if(activity->endCheck && !activity->done && activity->timesPrinted < 2) {
             printf("Is activity %s done? [yes/no] \n",activity->name);
             time(&tic);
             activity->done = readYesNo(activity);
             time(&toc);
+            activity->timesPrinted++;
         }
     }
     *timestamp += toc - tic;

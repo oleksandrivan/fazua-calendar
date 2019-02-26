@@ -47,6 +47,7 @@ void addActivity(struct Schedule *schedule, char *name, struct LocalTime *start,
     schedule->activities[schedule->usedSlots].startCheck =false;
     schedule->activities[schedule->usedSlots].endCheck =false;
     schedule->activities[schedule->usedSlots].forceCheck =false;
+    schedule->activities[schedule->usedSlots].timesPrinted =0;
 
 
     schedule->usedSlots++;
@@ -57,17 +58,6 @@ void reallocSchedule(struct Schedule *schedule) {
     schedule->activities = realloc(schedule->activities, sizeof(struct Activity) * schedule->size);
 }
 
-void createActivity( struct Activity *activity,const char * name, struct LocalTime *start, struct LocalTime *end){
-
-    activity->name = strdup(name);
-    activity->start = *start;
-    activity->end = *end;
-    activity->done = false;
-    activity->startCheck = false;
-    activity->endCheck = false;
-    activity->forceCheck = false;
-
-}
 
 int getCurrentActivity(struct Schedule *schedule,struct LocalTime *currentTime){
     int diff1,diff2;
