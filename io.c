@@ -16,7 +16,7 @@ void readSchedule(struct Schedule *schedule){
     while ((linelen = getline(&line, &linecap, fp)) > 0){
         start = strsep(&line, ",");
         end = strsep(&line, ",");
-        name = strsep(&line, "\n") ;
+        name = strdup(strsep(&line, "\n")) ;
 
         struct LocalTime startTime =  parseTime(start);
         struct LocalTime endTime =  parseTime(end);
@@ -28,6 +28,8 @@ void readSchedule(struct Schedule *schedule){
     fclose(fp);
     if (line)
         free(line);
+    if(name)
+        free(name);
 
 }
 struct LocalTime parseTime(char * string){
