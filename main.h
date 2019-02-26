@@ -10,6 +10,8 @@
 #include "io.h"
 #include <fcntl.h>
 #include <signal.h>
+#include <stdlib.h>
+
 
 void signalHandler(int sig);
 
