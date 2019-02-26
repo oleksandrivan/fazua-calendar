@@ -1,6 +1,6 @@
 00:00 , 7:00 , Sleep
 07:00 , 9:00 , Breakfast
-9:00 , 11:00 , Morning
+9:00 , 11:00 , Jogging
 11:00 , 12:30 , Pilates
 12:30 , 14:00 , Lunch
 14:00 , 15:30 , Nap
