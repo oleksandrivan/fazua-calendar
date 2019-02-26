@@ -4,19 +4,22 @@
 #include "io.h"
 void readSchedule(struct Schedule *schedule){
     FILE * fp;
-    char *line = NULL;
-    size_t linecap = 0;
-    ssize_t linelen;
+
+    char *buffer;
+    size_t bufsize = 50;
+    ssize_t characters;
+
+    buffer = (char *)malloc(bufsize * sizeof(char));
 
     char *start, *end, *name;
     fp = fopen("schedule.txt", "r");
     if (fp == NULL)
         printf("Schedule.txt missing at root folder\n");
 
-    while ((linelen = getline(&line, &linecap, fp)) > 0){
-        start = strsep(&line, ",");
-        end = strsep(&line, ",");
-        name = strdup(strsep(&line, "\n")) ;
+    while ((characters = getline(&buffer, &bufsize, fp)) > 0){
+        start = strsep(&buffer, ",");
+        end = strsep(&buffer, ",");
+        name = (strsep(&buffer, "\n")) ;
 
         struct LocalTime startTime =  parseTime(start);
         struct LocalTime endTime =  parseTime(end);
@@ -26,10 +29,9 @@ void readSchedule(struct Schedule *schedule){
 
 
     fclose(fp);
-    if (line)
-        free(line);
-    if(name)
-        free(name);
+    if (buffer)
+        free(buffer);
+
 
 }
 struct LocalTime parseTime(char * string){
