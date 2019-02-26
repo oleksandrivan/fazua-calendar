@@ -8,24 +8,24 @@ struct Schedule schedule;
 int actualActivityIndex;
 int speedFactor;
 time_t timestamp;
-int main(){
-    time(&timestamp);
-
-    signal(SIGINT,signalHandler);
-
-    readSchedule(&schedule);
-//    for(int i = 0; i < schedule.usedSlots ; i++){
-//        printf("Activity %s starts %d:%d ends %d:%d and state %d\n", schedule.activities[i].name,
-//               schedule.activities[i].start.hour,schedule.activities[i].start.minute,
-//               schedule.activities[i].end.hour,schedule.activities[i].end.minute,schedule.activities[i].done);
-//    }
-//    printf("Schedule size is %d\n",schedule.size);
-//
+int main(int argc, char *argv[] ){
     speedFactor = 1;
     char line[256];
     char answer[5];
     int hour,min;
+    char *endptr;
 
+    if(argc == 2){
+        speedFactor = (int) strtol(argv[1],&endptr,10);
+        printf("The speed factor is %d\n",speedFactor);
+    }
+
+    signal(SIGINT,signalHandler);
+    readSchedule(&schedule);
+
+
+
+    time(&timestamp);
     while(true){
         if(inputAvailable()){
             timestamp -=3;
