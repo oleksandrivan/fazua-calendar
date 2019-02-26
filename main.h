@@ -9,6 +9,6 @@
 #include "utils.h"
 #include "io.h"
 #include <fcntl.h>
-
+void signalHandler(int sig);
 
 #endif //FAZUA_CALENDAR_MAIN_H

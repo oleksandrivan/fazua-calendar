@@ -11,6 +11,8 @@ time_t timestamp;
 int main(){
     time(&timestamp);
 
+    signal(SIGINT,signalHandler);
+
     readSchedule(&schedule);
 //    for(int i = 0; i < schedule.usedSlots ; i++){
 //        printf("Activity %s starts %d:%d ends %d:%d and state %d\n", schedule.activities[i].name,
@@ -56,4 +58,9 @@ int main(){
     }
 
     return 0;
+}
+
+void signalHandler(int sig){
+    printf("Calendar app finished\n");
+    free(schedule.activities);
 }

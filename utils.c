@@ -76,3 +76,4 @@ int getCurrentActivity(struct Schedule *schedule,struct LocalTime *currentTime){
     }
     return 0;
 }
+
