@@ -62,6 +62,9 @@ int main(){
 
 void signalHandler(int sig){
     printf("Calendar app finished\n");
+        for(int i = 0; i < schedule.usedSlots ; i++){
+        free(schedule.activities[i].name);
+    }
     free(schedule.activities);
     exit(EXIT_SUCCESS);
 }
