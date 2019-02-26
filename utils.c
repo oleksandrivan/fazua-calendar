@@ -39,8 +39,7 @@ void addActivity(struct Schedule *schedule, char *name, struct LocalTime *start,
         reallocSchedule(schedule);
     }
 
-    schedule->activities[schedule->usedSlots].name = malloc(sizeof(name));
-    strcpy(schedule->activities[schedule->usedSlots].name,name);
+    schedule->activities[schedule->usedSlots].name = strdup(name);
     schedule->activities[schedule->usedSlots].start = *start;
     schedule->activities[schedule->usedSlots].end = *end;
     schedule->activities[schedule->usedSlots].done =false;
