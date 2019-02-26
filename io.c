@@ -5,21 +5,17 @@
 void readSchedule(struct Schedule *schedule){
     FILE * fp;
 
-    char *buffer;
-    size_t bufsize = 50;
-    ssize_t characters;
+    char line[256];
+    char name[20];
+    char start[20];
+    char end[20];
 
-    buffer = (char *)malloc(bufsize * sizeof(char));
-
-    char *start, *end, *name;
     fp = fopen("schedule.txt", "r");
     if (fp == NULL)
         printf("Schedule.txt missing at root folder\n");
 
-    while ((characters = getline(&buffer, &bufsize, fp)) > 0){
-        start = strsep(&buffer, ",");
-        end = strsep(&buffer, ",");
-        name = (strsep(&buffer, "\n")) ;
+    while (fgets(line, sizeof(line), fp)){
+        if(3 == sscanf(line, "%s , %s , %s \n", start,end,name));
 
         struct LocalTime startTime =  parseTime(start);
         struct LocalTime endTime =  parseTime(end);
@@ -29,17 +25,12 @@ void readSchedule(struct Schedule *schedule){
 
 
     fclose(fp);
-    if (buffer)
-        free(buffer);
-
 
 }
 struct LocalTime parseTime(char * string){
     struct LocalTime localTime;
-    char *eptr = NULL;
 
-    localTime.hour = strtol(strsep(&string, ":"), &eptr, 10);
-    localTime.minute = strtol(strsep(&string, "\n"), &eptr, 10);
+    sscanf(string,"%d:%d",&localTime.hour,&localTime.minute);
 
     return localTime;
 }
