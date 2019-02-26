@@ -63,4 +63,5 @@ int main(){
 void signalHandler(int sig){
     printf("Calendar app finished\n");
     free(schedule.activities);
+    exit(0);
 }
