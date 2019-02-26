@@ -4,26 +4,26 @@
 #include "io.h"
 void readSchedule(struct Schedule *schedule){
     FILE * fp;
-    char * line = NULL;
-    size_t len = 0;
+    char *line = NULL;
+    size_t linecap = 0;
+    ssize_t linelen;
 
     char *start, *end, *name;
     fp = fopen("schedule.txt", "r");
     if (fp == NULL)
         printf("Schedule.txt missing at root folder\n");
 
-    while ((getline(&line, &len, fp)) != -1) {
-        struct Activity activity;
+    while ((linelen = getline(&line, &linecap, fp)) > 0){
         start = strsep(&line, ",");
         end = strsep(&line, ",");
-        name = strsep(&line, "\n");
+        name = strdup(strsep(&line, "\n")) ;
 
         struct LocalTime startTime =  parseTime(start);
         struct LocalTime endTime =  parseTime(end);
-        activity = createActivity(name,&startTime,&endTime);
+        addActivity(schedule,name,&startTime,&endTime);
 
-        addActivity(schedule,&activity);
     }
+
 
     fclose(fp);
     if (line)
@@ -32,10 +32,10 @@ void readSchedule(struct Schedule *schedule){
 }
 struct LocalTime parseTime(char * string){
     struct LocalTime localTime;
-    char * eptr;
+    char *eptr = NULL;
 
-    localTime.hour = strtol(strsep(&string, ":"), eptr, 10);
-    localTime.minute = strtol(strsep(&string, "\n"), eptr, 10);
+    localTime.hour = strtol(strsep(&string, ":"), &eptr, 10);
+    localTime.minute = strtol(strsep(&string, "\n"), &eptr, 10);
 
     return localTime;
 }
@@ -53,6 +53,8 @@ bool inputAvailable(){
 
 void checkActivity(struct Activity * activity, time_t *timestamp){
     time_t tic,toc;
+    tic = 0;
+    toc = 0;
 
     if(activity->done && activity->forceCheck){
         activity->forceCheck = false;
@@ -97,4 +99,5 @@ bool readYesNo(struct Activity *activity){
            }
         }
     }
+    return false;
 }

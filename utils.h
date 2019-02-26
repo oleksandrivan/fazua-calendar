@@ -38,9 +38,7 @@ void getTime(struct LocalTime *localTime,int *speedFactor, time_t *timestamp);
 
 void setTime(struct LocalTime *newTime, int *speedFactor, time_t *timestamp);
 
-void addActivity(struct Schedule *schedule, struct Activity *activity);
-
-struct Activity createActivity(const char * name, struct LocalTime *start, struct LocalTime *end);
+void addActivity(struct Schedule *schedule, char *name, struct LocalTime *start, struct LocalTime *end);
 
 int getCurrentActivity(struct Schedule *schedule,struct LocalTime *currentTime);
 

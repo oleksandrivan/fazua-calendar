@@ -31,7 +31,7 @@ void initializeSchedule(struct Schedule *schedule){
     schedule->usedSlots = 0;
 }
 
-void addActivity(struct Schedule *schedule, struct Activity *activity){
+void addActivity(struct Schedule *schedule, char *name, struct LocalTime *start, struct LocalTime *end){
     //Our schedule is dynamically allocated, so it grows with more activities we add
     if(schedule->size == 0){
         initializeSchedule(schedule);
@@ -39,7 +39,17 @@ void addActivity(struct Schedule *schedule, struct Activity *activity){
         reallocSchedule(schedule);
     }
 
-    schedule->activities[schedule->usedSlots++] = *activity;
+    schedule->activities[schedule->usedSlots].name = malloc(sizeof(name));
+    strcpy(schedule->activities[schedule->usedSlots].name,name);
+    schedule->activities[schedule->usedSlots].start = *start;
+    schedule->activities[schedule->usedSlots].end = *end;
+    schedule->activities[schedule->usedSlots].done =false;
+    schedule->activities[schedule->usedSlots].startCheck =false;
+    schedule->activities[schedule->usedSlots].endCheck =false;
+    schedule->activities[schedule->usedSlots].forceCheck =false;
+
+
+    schedule->usedSlots++;
 }
 
 void reallocSchedule(struct Schedule *schedule) {
@@ -47,18 +57,16 @@ void reallocSchedule(struct Schedule *schedule) {
     schedule->activities = realloc(schedule->activities, sizeof(struct Activity) * schedule->size);
 }
 
-struct Activity createActivity(const char * name, struct LocalTime *start, struct LocalTime *end){
-    struct Activity newActivity;
+void createActivity( struct Activity *activity,const char * name, struct LocalTime *start, struct LocalTime *end){
 
-    newActivity.name = strdup(name);
-    newActivity.start = *start;
-    newActivity.end = *end;
-    newActivity.done = false;
-    newActivity.startCheck = false;
-    newActivity.endCheck = false;
-    newActivity.forceCheck = false;
+    activity->name = strdup(name);
+    activity->start = *start;
+    activity->end = *end;
+    activity->done = false;
+    activity->startCheck = false;
+    activity->endCheck = false;
+    activity->forceCheck = false;
 
-    return newActivity;
 }
 
 int getCurrentActivity(struct Schedule *schedule,struct LocalTime *currentTime){
@@ -76,4 +84,5 @@ int getCurrentActivity(struct Schedule *schedule,struct LocalTime *currentTime){
             return  i;
         }
     }
+    return 0;
 }

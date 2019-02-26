@@ -64,47 +64,50 @@ int main(){
 //    printf("Schedule size is %d\n",schedule.size);
 
     readSchedule(&schedule);
-//    for(int i = 0; i < schedule.usedSlots ; i++){
-//        printf("Activity %s starts %d:%d ends %d:%d and state %d\n", schedule.activities[i].name,
-//               schedule.activities[i].start.hour,schedule.activities[i].start.minute,
-//               schedule.activities[i].end.hour,schedule.activities[i].end.minute,schedule.activities[i].done);
-//    }
-//    printf("Schedule size is %d\n",schedule.size);
+    for(int i = 0; i < schedule.usedSlots ; i++){
+        printf("Activity %s starts %d:%d ends %d:%d and state %d\n", schedule.activities[i].name,
+               schedule.activities[i].start.hour,schedule.activities[i].start.minute,
+               schedule.activities[i].end.hour,schedule.activities[i].end.minute,schedule.activities[i].done);
+    }
+    printf("Schedule size is %d\n",schedule.size);
+//
+//    speedFactor = 2;
+//    char line[256];
+//    char answer[5];
+//    int hour,min;
 
-    speedFactor = 3;
-    char line[256];
-    char answer[5];
-    int hour,min;
-
-    while(true){
-        if(inputAvailable()){
-            timestamp -=3;
-            if (fgets(line, sizeof(line), stdin)) {
-                if (2 == sscanf(line, "%d:%d", &hour,&min)){
-                    printf("Time introduced is %d:%d \n",hour,min);
-                    struct LocalTime newTime;
-                    newTime.hour = hour;
-                    newTime.minute = min;
-                    setTime(&newTime, &speedFactor,&timestamp);
-                } else if (1 == sscanf(line, "%s", answer)) {
-                    if(strcmp(answer,"now") == 0){
-                        getTime(&localTime,&speedFactor,&timestamp);
-                        printf("Actual time is %d:%d \n",localTime.hour,localTime.minute); //TODO force check
-                    }else {
-                        printf("Wrong input\n");
-                    }
-                }
-            }
-        } else{
+//    while(true){
+//        if(inputAvailable()){
+//            timestamp -=3;
+//            if (fgets(line, sizeof(line), stdin)) {
+//                if (2 == sscanf(line, "%d:%d", &hour,&min)){
+//                    printf("Time introduced is %d:%d \n",hour,min);
+//                    struct LocalTime newTime;
+//                    newTime.hour = hour;
+//                    newTime.minute = min;
+//                    setTime(&newTime, &speedFactor,&timestamp);
+//                } else if (1 == sscanf(line, "%s", answer)) {
+//                    if(strcmp(answer,"now") == 0){
+//                        getTime(&localTime,&speedFactor,&timestamp);
+//                        printf("Actual time is %d:%d \n",localTime.hour,localTime.minute);
+//                        actualActivityIndex = getCurrentActivity(&schedule,&localTime);
+//                        schedule.activities[actualActivityIndex].forceCheck = true;
+//                    }else {
+//                        printf("Wrong input\n");
+//                    }
+//                }
+//            }
+//            sleep(3);
+//        } else{
 //            checkActivity(&schedule.activities[actualActivityIndex],&timestamp);
 //            getTime(&localTime,&speedFactor,&timestamp);
 //            actualActivityIndex = getCurrentActivity(&schedule,&localTime);
-//            printf("Actual time is %d:%d\n",localTime.hour,localTime.minute);
+////            printf("Actual time is %d:%d\n",localTime.hour,localTime.minute);
 //            printf("Actual activity is %s and it's done %d\n", schedule.activities[actualActivityIndex].name,
 //                    schedule.activities[actualActivityIndex].done);
-            sleep(3);
-        }
-    }
+//            sleep(1);
+//        }
+//    }
 
 //    actualActivityIndex = 2;
 //    checkActivity(&schedule.activities[actualActivityIndex]);
